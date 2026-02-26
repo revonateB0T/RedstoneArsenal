@@ -70,7 +70,7 @@ public class FluxArmorItem extends ArmorItemCoFH implements IFluxItem {
     @Override
     public boolean isDamageable(ItemStack stack) {
 
-        return false;
+        return true;
     }
 
     @Override

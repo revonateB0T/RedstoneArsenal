@@ -85,7 +85,7 @@ public class FluxElytraItem extends ElytraItem implements IMultiModeFluxItem {
     @Override
     public boolean isDamageable(ItemStack stack) {
 
-        return false;
+        return true;
     }
 
     @Override

@@ -142,42 +142,42 @@ public class RSAEvents {
         }
     }
 
-    @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void handleLivingAttackEvent(LivingAttackEvent event) {
-
-        if (event.isCanceled()) {
-            return;
-        }
-        LivingEntity target = event.getEntity();
-        DamageSource source = event.getSource();
-        // Flux Shielding
-        float amount = event.getAmount();
-        if (amount > target.getHealth() * 0.5F && !(target instanceof Player player && (player.isCreative() || player.isSpectator())) && !(source.is(DamageTypeTags.BYPASSES_ARMOR) && source.is(DamageTypeTags.BYPASSES_EFFECTS))) {
-            ItemStack shieldedItem = FluxShieldingHelper.findShieldedItem(target);
-            if (!shieldedItem.isEmpty()) {
-                if (target.invulnerableTime > 0) {
-                    event.setCanceled(true);
-                } else if (FluxShieldingHelper.useFluxShieldCharge(target, shieldedItem)) {
-                    target.invulnerableTime = 10;
-                    event.setCanceled(true);
-                    if (target instanceof ServerPlayer) {
-                        FluxShieldingHelper.updateHUD((ServerPlayer) target);
-                    }
-                }
-                return;
-            }
-        }
-
-        // Flux Armor Helmet Damage
-        if (source.is(DamageTypeTags.DAMAGES_HELMET)) {
-            ItemStack helmet = target.getItemBySlot(EquipmentSlot.HEAD);
-            float damage = Math.max(0.5F, amount * 0.25F);
-            if (helmet.getItem() instanceof FluxArmorItem armor) {
-                int use = Math.min((int) (damage * armor.getEnergyPerUse(false)), armor.getEnergyStored(helmet));
-                armor.useEnergy(helmet, use, target);
-            }
-        }
-    }
+    // @SubscribeEvent (priority = EventPriority.LOWEST)
+    // public static void handleLivingAttackEvent(LivingAttackEvent event) {
+    //
+    //     if (event.isCanceled()) {
+    //         return;
+    //     }
+    //     LivingEntity target = event.getEntity();
+    //     DamageSource source = event.getSource();
+    //     // Flux Shielding
+    //     float amount = event.getAmount();
+    //     if (amount > target.getHealth() * 0.5F && !(target instanceof Player player && (player.isCreative() || player.isSpectator())) && !(source.is(DamageTypeTags.BYPASSES_ARMOR) && source.is(DamageTypeTags.BYPASSES_EFFECTS))) {
+    //         ItemStack shieldedItem = FluxShieldingHelper.findShieldedItem(target);
+    //         if (!shieldedItem.isEmpty()) {
+    //             if (target.invulnerableTime > 0) {
+    //                 event.setCanceled(true);
+    //             } else if (FluxShieldingHelper.useFluxShieldCharge(target, shieldedItem)) {
+    //                 target.invulnerableTime = 10;
+    //                 event.setCanceled(true);
+    //                 if (target instanceof ServerPlayer) {
+    //                     FluxShieldingHelper.updateHUD((ServerPlayer) target);
+    //                 }
+    //             }
+    //             return;
+    //         }
+    //     }
+    //
+    //     // Flux Armor Helmet Damage
+    //     if (source.is(DamageTypeTags.DAMAGES_HELMET)) {
+    //         ItemStack helmet = target.getItemBySlot(EquipmentSlot.HEAD);
+    //         float damage = Math.max(0.5F, amount * 0.25F);
+    //         if (helmet.getItem() instanceof FluxArmorItem armor) {
+    //             int use = Math.min((int) (damage * armor.getEnergyPerUse(false)), armor.getEnergyStored(helmet));
+    //             armor.useEnergy(helmet, use, target);
+    //         }
+    //     }
+    // }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleLivingHurtEvent(LivingHurtEvent event) {
