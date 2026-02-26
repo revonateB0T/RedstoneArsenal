@@ -142,7 +142,7 @@ public class RSAEvents {
         }
     }
 
-    @SubscribeEvent (priority = EventPriority.LOWEST)
+    @SubscribeEvent (priority = EventPriority.HIGHEST)
     public static void handleLivingHurtEvent(LivingHurtEvent event) {
 
         if (event.isCanceled()) {
