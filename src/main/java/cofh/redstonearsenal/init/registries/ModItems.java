@@ -82,7 +82,7 @@ public class ModItems {
         registerWithTab("flux_chestplate", () -> new FluxArmorItem(FLUX_ARMOR, ArmorItem.Type.CHESTPLATE, itemProperties().stacksTo(1).rarity(rarity).setNoRepair(), energy, xfer));
         registerWithTab("flux_leggings", () -> new FluxArmorItem(FLUX_ARMOR, ArmorItem.Type.LEGGINGS, itemProperties().stacksTo(1).rarity(rarity).setNoRepair(), energy, xfer));
         registerWithTab("flux_boots", () -> new FluxArmorItem(FLUX_ARMOR, ArmorItem.Type.BOOTS, itemProperties().stacksTo(1).rarity(rarity).setNoRepair(), energy, xfer));
-        registerWithTab("flux_elytra", () -> new FluxElytraItem(FLUX_ELYTRA, ArmorItem.Type.CHESTPLATE, itemProperties().stacksTo(1).rarity(rarity).setNoRepair(), energy, xfer));
+        registerWithTab("flux_elytra", () -> new FluxElytraItem(itemProperties().stacksTo(1).rarity(rarity).setNoRepair(), energy, xfer));
         registerWithTab("flux_controller", () -> new FluxElytraControllerItem(itemProperties().stacksTo(1).rarity(rarity).setNoRepair()));
     }
 
