@@ -27,6 +27,18 @@ import static cofh.redstonearsenal.init.registries.ModSounds.SOUND_SHIELDING_REC
 public class FluxShieldingHelper {
 
     public static final String TAG_FLUX_SHIELD = "FluxShield";
+    public static final String TAG_FLUX_SHIELD_COOLDOWN_UNTIL = "FluxShieldCooldownUntil";
+
+    public static boolean isFluxShieldCooldownActive(LivingEntity entity) {
+
+        long until = entity.getPersistentData().getLong(TAG_FLUX_SHIELD_COOLDOWN_UNTIL);
+        return entity.level.getGameTime() < until;
+    }
+
+    public static void setFluxShieldCooldown(LivingEntity entity, int ticks) {
+
+        entity.getPersistentData().putLong(TAG_FLUX_SHIELD_COOLDOWN_UNTIL, entity.level.getGameTime() + ticks);
+    }
 
     public static int currentCharges = 0;
     public static int maximumCharges = 0;
