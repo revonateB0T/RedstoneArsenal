@@ -6,6 +6,7 @@ import cofh.redstonearsenal.common.item.FluxShovelItem;
 import cofh.redstonearsenal.common.item.FluxSickleItem;
 import cofh.redstonearsenal.common.item.FluxTridentItem;
 import cofh.redstonearsenal.util.FluxShieldingHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -160,6 +161,9 @@ public class RSAEvents {
         if (FluxShieldingHelper.hasFluxShieldCharge(target)) {
             if (FluxShieldingHelper.isFluxShieldCooldownActive(target)) {
                 event.setCanceled(true);
+                if (target instanceof Player player) {
+                    player.sendSystemMessage(Component.literal("Damage: " + amount + " | Health: " + target.getHealth() + "/" + target.getMaxHealth() + " | Flux Shield: " + FluxShieldingHelper.hasFluxShieldCharge(target)));
+                }
                 return;
             }
         }
@@ -180,6 +184,9 @@ public class RSAEvents {
                     armor.useEnergy(stack, use, target);
                 }
             });
+        }
+        if (target instanceof Player player) {
+            player.sendSystemMessage(Component.literal("Damage: " + amount + " | Health: " + target.getHealth() + "/" + target.getMaxHealth() + " | Flux Shield: " + FluxShieldingHelper.hasFluxShieldCharge(target)));
         }
     }
 
