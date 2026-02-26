@@ -29,7 +29,7 @@ public class FluxShieldingHelper {
     public static final String TAG_FLUX_SHIELD = "FluxShield";
     public static final String TAG_FLUX_SHIELD_COOLDOWN_UNTIL = "FluxShieldCooldownUntil";
 
-    public static boolean isFluxShieldCooldownActive(LivingEntity entity) {
+    public static boolean isFluxShieldExcited(LivingEntity entity) {
 
         long until = entity.getPersistentData().getLong(TAG_FLUX_SHIELD_COOLDOWN_UNTIL);
         return entity.level.getGameTime() < until;

@@ -18,9 +18,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
@@ -141,8 +142,25 @@ public class RSAEvents {
         }
     }
 
+    @SubscribeEvent (priority = EventPriority.HIGHEST)
+    public static void handleLivingAttactEvent(LivingAttackEvent event) {
+
+        if (event.isCanceled()) {
+            return;
+        }
+        // Flux Shielding
+        DamageSource source = event.getSource();
+        if (source.is(DamageTypeTags.BYPASSES_ARMOR) && source.is(DamageTypeTags.BYPASSES_EFFECTS)) {
+            return;
+        }
+        LivingEntity target = event.getEntity();
+        if (FluxShieldingHelper.hasFluxShieldCharge(target) && FluxShieldingHelper.isFluxShieldExcited(target)) {
+            event.setCanceled(true);
+        }
+    }
+
     @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void handleLivingHurtEvent(LivingHurtEvent event) {
+    public static void handleLivingDamageEvent(LivingDamageEvent event) {
 
         if (event.isCanceled()) {
             return;
@@ -158,14 +176,14 @@ public class RSAEvents {
         }
         LivingEntity target = event.getEntity();
         if (FluxShieldingHelper.hasFluxShieldCharge(target)) {
-            if (FluxShieldingHelper.isFluxShieldCooldownActive(target)) {
+            if (FluxShieldingHelper.isFluxShieldExcited(target)) {
                 event.setCanceled(true);
                 return;
             }
         }
         if (amount > target.getHealth() * 0.5F && FluxShieldingHelper.hasFluxShieldCharge(target)) {
             if (FluxShieldingHelper.useFluxShieldCharge(target)) {
-                FluxShieldingHelper.setFluxShieldCooldown(target, 20);
+                FluxShieldingHelper.setFluxShieldCooldown(target, 30);
                 target.invulnerableTime = 20;
                 event.setCanceled(true);
                 if (target instanceof ServerPlayer) {
