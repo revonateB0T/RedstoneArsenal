@@ -1,6 +1,7 @@
 package cofh.redstonearsenal.common.item;
 
 import cofh.core.common.config.CoreClientConfig;
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.common.energy.EnergyContainerItemWrapper;
 import cofh.lib.util.Utils;
@@ -178,10 +179,30 @@ public class FluxElytraItem extends ElytraItem implements IMultiModeFluxItem {
         }
     }
 
+    public static ItemStack findFluxElytra(LivingEntity entity) {
+
+        ItemStack chest = entity.getItemBySlot(EquipmentSlot.CHEST);
+        if (chest.getItem() instanceof FluxElytraItem) {
+            return chest;
+        }
+        final ItemStack[] retStack = {ItemStack.EMPTY};
+        CuriosProxy.getAllWorn(entity).ifPresent(c -> {
+            for (int i = 0; i < c.getSlots(); ++i) {
+                ItemStack slot = c.getStackInSlot(i);
+                if (slot.getItem() instanceof FluxElytraItem) {
+                    retStack[0] = slot;
+                    return;
+                }
+            }
+        });
+        return retStack[0];
+    }
+
     //Used to boost a single time, similar to a rocket.
     public boolean boost(ItemStack stack, LivingEntity entity, int time) {
 
-        if (!entity.getItemBySlot(EquipmentSlot.CHEST).canElytraFly(entity)) {
+        ItemStack elytraStack = findFluxElytra(entity);
+        if (elytraStack.isEmpty() || !elytraStack.canElytraFly(entity)) {
             return false;
         }
         boolean isPlayer = entity instanceof Player;
