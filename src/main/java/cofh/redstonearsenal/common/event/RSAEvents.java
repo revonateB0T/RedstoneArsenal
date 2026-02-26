@@ -21,7 +21,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
@@ -143,7 +143,7 @@ public class RSAEvents {
     }
 
     @SubscribeEvent (priority = EventPriority.LOWEST)
-    public static void handleLivingDamageEvent(LivingHurtEvent event) {
+    public static void handleLivingDamageEvent(LivingDamageEvent event) {
 
         if (event.isCanceled()) {
             return;
