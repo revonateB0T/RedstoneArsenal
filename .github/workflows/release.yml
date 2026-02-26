@@ -2,8 +2,11 @@ name: Build and Release
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - 1.20.1
+  pull_request:
+    branches:
+      - 1.20.1
 
 jobs:
   build:
@@ -44,10 +47,3 @@ jobs:
         with:
           name: build-artifacts
           path: build/libs/*.jar
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: build/libs/*.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
