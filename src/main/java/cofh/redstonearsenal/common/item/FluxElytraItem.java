@@ -29,6 +29,8 @@ import static cofh.lib.util.helpers.StringHelper.getTextComponent;
 
 public class FluxElytraItem extends ElytraItem implements IMultiModeFluxItem {
 
+    protected String modId = "";
+
     protected int maxEnergy;
     protected int extract;
     protected int receive;
@@ -48,6 +50,19 @@ public class FluxElytraItem extends ElytraItem implements IMultiModeFluxItem {
 
         ProxyUtils.registerItemModelProperty(this, new ResourceLocation("charged"), this::getChargedModelProperty);
         ProxyUtils.registerItemModelProperty(this, new ResourceLocation("empowered"), this::getEmpoweredModelProperty);
+    }
+
+    @Override
+    public FluxElytraItem setModId(String modId) {
+
+        this.modId = modId;
+        return this;
+    }
+
+    @Override
+    public String getCreatorModId(ItemStack itemStack) {
+
+        return modId == null || modId.isEmpty() ? super.getCreatorModId(itemStack) : modId;
     }
 
     @Override
