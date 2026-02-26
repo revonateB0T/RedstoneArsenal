@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -142,43 +141,6 @@ public class RSAEvents {
         }
     }
 
-//    @SubscribeEvent (priority = EventPriority.LOWEST)
-//    public static void handleLivingAttackEvent(LivingAttackEvent event) {
-//
-//        if (event.isCanceled()) {
-//            return;
-//        }
-//        LivingEntity target = event.getEntity();
-//        DamageSource source = event.getSource();
-//        // Flux Shielding
-//        float amount = event.getAmount();
-//        if (amount > target.getHealth() * 0.5F && !(target instanceof Player player && (player.isCreative() || player.isSpectator())) && !(source.is(DamageTypeTags.BYPASSES_ARMOR) && source.is(DamageTypeTags.BYPASSES_EFFECTS))) {
-//            ItemStack shieldedItem = FluxShieldingHelper.findShieldedItem(target);
-//            if (!shieldedItem.isEmpty()) {
-//                if (target.invulnerableTime > 0) {
-//                    event.setCanceled(true);
-//                } else if (FluxShieldingHelper.useFluxShieldCharge(target, shieldedItem)) {
-//                    target.invulnerableTime = 10;
-//                    event.setCanceled(true);
-//                    if (target instanceof ServerPlayer) {
-//                        FluxShieldingHelper.updateHUD((ServerPlayer) target);
-//                    }
-//                }
-//                return;
-//            }
-//        }
-//
-//        // Flux Armor Helmet Damage
-//        if (source.is(DamageTypeTags.DAMAGES_HELMET)) {
-//            ItemStack helmet = target.getItemBySlot(EquipmentSlot.HEAD);
-//            float damage = Math.max(0.5F, amount * 0.25F);
-//            if (helmet.getItem() instanceof FluxArmorItem armor) {
-//                int use = Math.min((int) (damage * armor.getEnergyPerUse(false)), armor.getEnergyStored(helmet));
-//                armor.useEnergy(helmet, use, target);
-//            }
-//        }
-//    }
-
     @SubscribeEvent (priority = EventPriority.LOWEST)
     public static void handleLivingHurtEvent(LivingHurtEvent event) {
 
@@ -195,10 +157,15 @@ public class RSAEvents {
             return;
         }
         LivingEntity target = event.getEntity();
-        if (amount > target.getHealth() * 0.5F && FluxShieldingHelper.useFluxShieldCharge(target)) {
-            event.setAmount(0);
-            if (target instanceof ServerPlayer) {
-                FluxShieldingHelper.updateHUD((ServerPlayer) target);
+        if (amount > target.getHealth() * 0.5F && FluxShieldingHelper.hasFluxShieldCharge(target)) {
+            if (target.invulnerableTime > 0) {
+                event.setCanceled(true);
+            } else if (FluxShieldingHelper.useFluxShieldCharge(target)) {
+                target.invulnerableTime = 20;
+                event.setCanceled(true);
+                if (target instanceof ServerPlayer) {
+                    FluxShieldingHelper.updateHUD((ServerPlayer) target);
+                }
             }
         } else if (!source.is(DamageTypeTags.BYPASSES_ARMOR)) { // Flux Armor Damage
             float damage = Math.max(0.5F, amount * 0.25F);
