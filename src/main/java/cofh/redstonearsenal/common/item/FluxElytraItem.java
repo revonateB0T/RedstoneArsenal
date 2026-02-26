@@ -2,6 +2,7 @@ package cofh.redstonearsenal.common.item;
 
 import cofh.core.common.config.CoreClientConfig;
 import cofh.core.util.ProxyUtils;
+import cofh.lib.common.energy.EnergyContainerItemWrapper;
 import cofh.lib.util.Utils;
 import cofh.lib.util.constants.NBTTags;
 import net.minecraft.ChatFormatting;
@@ -62,7 +63,7 @@ public class FluxElytraItem extends ElytraItem implements IMultiModeFluxItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 
-        return IMultiModeFluxItem.super.initCapabilities(stack, nbt);
+        return new EnergyContainerItemWrapper(stack, this, getEnergyCapability());
     }
 
     @Override
