@@ -157,10 +157,14 @@ public class RSAEvents {
             return;
         }
         LivingEntity target = event.getEntity();
-        if (amount > target.getHealth() * 0.5F && FluxShieldingHelper.hasFluxShieldCharge(target)) {
+        if (FluxShieldingHelper.hasFluxShieldCharge(target)) {
             if (target.invulnerableTime > 0) {
                 event.setCanceled(true);
-            } else if (FluxShieldingHelper.useFluxShieldCharge(target)) {
+                return;
+            }
+        }
+        if (amount > target.getHealth() * 0.5F && FluxShieldingHelper.hasFluxShieldCharge(target)) {
+            if (FluxShieldingHelper.useFluxShieldCharge(target)) {
                 target.invulnerableTime = 20;
                 event.setCanceled(true);
                 if (target instanceof ServerPlayer) {
