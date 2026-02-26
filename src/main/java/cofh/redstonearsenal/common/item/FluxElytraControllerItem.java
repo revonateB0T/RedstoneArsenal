@@ -1,6 +1,7 @@
 package cofh.redstonearsenal.common.item;
 
 import cofh.core.common.item.IMultiModeItem;
+import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.ChatFormatting;
@@ -47,14 +48,33 @@ public class FluxElytraControllerItem extends Item implements ICoFHItem, IMultiM
         return getMode(stack) > 0;
     }
 
+    protected ItemStack findFluxElytra(Player player) {
+
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (chest.getItem() instanceof FluxElytraItem) {
+            return chest;
+        }
+        final ItemStack[] retStack = {ItemStack.EMPTY};
+        CuriosProxy.getAllWorn(player).ifPresent(c -> {
+            for (int i = 0; i < c.getSlots(); ++i) {
+                ItemStack slot = c.getStackInSlot(i);
+                if (slot.getItem() instanceof FluxElytraItem) {
+                    retStack[0] = slot;
+                    return;
+                }
+            }
+        });
+        return retStack[0];
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
 
         ItemStack stack = player.getItemInHand(hand);
-        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.getItem() instanceof FluxElytraItem elytra) {
-            elytra.setMode(chest, getMode(stack));
-            if (elytra.boost(chest, player)) {
+        ItemStack elytraStack = findFluxElytra(player);
+        if (elytraStack.getItem() instanceof FluxElytraItem elytra) {
+            elytra.setMode(elytraStack, getMode(stack));
+            if (elytra.boost(elytraStack, player)) {
                 return InteractionResultHolder.sidedSuccess(stack, world.isClientSide());
             }
         }
@@ -64,9 +84,9 @@ public class FluxElytraControllerItem extends Item implements ICoFHItem, IMultiM
     @Override
     public void onModeChange(Player player, ItemStack stack) {
 
-        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.getItem() instanceof FluxElytraItem elytra) {
-            elytra.setMode(chest, getMode(stack));
+        ItemStack elytraStack = findFluxElytra(player);
+        if (elytraStack.getItem() instanceof FluxElytraItem elytra) {
+            elytra.setMode(elytraStack, getMode(stack));
             if (isEmpowered(stack)) {
                 player.level.playSound(null, player.blockPosition(), SOUND_EMPOWER.get(), SoundSource.PLAYERS, 0.4F, 1.0F);
             } else {
