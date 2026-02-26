@@ -1,7 +1,6 @@
 package cofh.redstonearsenal.common.item;
 
 import cofh.core.common.item.IMultiModeItem;
-import cofh.core.compat.curios.CuriosProxy;
 import cofh.core.util.ProxyUtils;
 import cofh.lib.api.item.ICoFHItem;
 import net.minecraft.ChatFormatting;
@@ -10,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -50,21 +48,7 @@ public class FluxElytraControllerItem extends Item implements ICoFHItem, IMultiM
 
     protected ItemStack findFluxElytra(Player player) {
 
-        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
-        if (chest.getItem() instanceof FluxElytraItem) {
-            return chest;
-        }
-        final ItemStack[] retStack = {ItemStack.EMPTY};
-        CuriosProxy.getAllWorn(player).ifPresent(c -> {
-            for (int i = 0; i < c.getSlots(); ++i) {
-                ItemStack slot = c.getStackInSlot(i);
-                if (slot.getItem() instanceof FluxElytraItem) {
-                    retStack[0] = slot;
-                    return;
-                }
-            }
-        });
-        return retStack[0];
+        return FluxElytraItem.findFluxElytra(player);
     }
 
     @Override
