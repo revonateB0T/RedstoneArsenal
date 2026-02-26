@@ -17,7 +17,7 @@ import static cofh.redstonearsenal.util.FluxShieldingHelper.TAG_FLUX_SHIELD;
 
 /**
  * Standard implementation for the IFluxShieldItem capability.
- * An energy container with 1 shield charge that takes 30 seconds to regenerate.
+ * An energy container with 1 shield charge that takes 15 seconds to regenerate.
  *
  * @author Hekera
  * why am i here
@@ -27,7 +27,7 @@ public class FluxShieldedEnergyItemWrapper extends EnergyContainerItemWrapper im
     private final LazyOptional<IFluxShieldedItem> holder = LazyOptional.of(() -> this);
 
     protected final ItemStack shieldedItem;
-    protected final int COOLDOWN = 600;
+    protected final int COOLDOWN = 300;
     protected int energyPerUse;
     protected long availableTime = -1;
 

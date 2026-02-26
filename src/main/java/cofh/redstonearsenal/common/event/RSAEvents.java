@@ -152,7 +152,7 @@ public class RSAEvents {
         DamageSource source = event.getSource();
         // Flux Shielding
         float amount = event.getAmount();
-        if (amount <= 500.0F && !(target instanceof Player player && (player.isCreative() || player.isSpectator())) && !(source.is(DamageTypeTags.BYPASSES_ARMOR) && source.is(DamageTypeTags.BYPASSES_EFFECTS))) {
+        if (amount > target.getHealth() * 0.5F && !(target instanceof Player player && (player.isCreative() || player.isSpectator())) && !(source.is(DamageTypeTags.BYPASSES_ARMOR) && source.is(DamageTypeTags.BYPASSES_EFFECTS))) {
             ItemStack shieldedItem = FluxShieldingHelper.findShieldedItem(target);
             if (!shieldedItem.isEmpty()) {
                 if (target.invulnerableTime > 0) {
@@ -195,8 +195,8 @@ public class RSAEvents {
             return;
         }
         LivingEntity target = event.getEntity();
-        if (FluxShieldingHelper.useFluxShieldCharge(target)) {
-            event.setAmount(Math.max(amount - 500.0F, 0));
+        if (amount > target.getHealth() * 0.5F && FluxShieldingHelper.useFluxShieldCharge(target)) {
+            event.setAmount(0);
             if (target instanceof ServerPlayer) {
                 FluxShieldingHelper.updateHUD((ServerPlayer) target);
             }
