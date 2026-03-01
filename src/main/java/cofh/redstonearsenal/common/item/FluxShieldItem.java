@@ -6,6 +6,7 @@ import cofh.lib.api.capability.IShieldItem;
 import cofh.lib.api.item.IEnergyContainerItem;
 import cofh.lib.common.energy.EnergyContainerItemWrapper;
 import cofh.lib.common.item.ShieldItemCoFH;
+import cofh.redstonearsenal.RedstoneArsenal;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Direction;
@@ -204,8 +205,7 @@ public class FluxShieldItem extends ShieldItemCoFH implements IMultiModeFluxItem
             if (!target.isBlocking() || target.isInvulnerableTo(source) || (target.hasEffect(MobEffects.FIRE_RESISTANCE) && source.is(DamageTypeTags.IS_FIRE))) {
                 return false;
             }
-            // TODO 1.20 change to tags
-            return source.getMsgId().equals("flux") && IShieldItem.canBlockDamagePosition(target, source.getSourcePosition());
+            return (source.is(RedstoneArsenal.FLUX) || source.is(RedstoneArsenal.FLUX_RANGED)) && IShieldItem.canBlockDamagePosition(target, source.getSourcePosition());
         }
 
         @Override
